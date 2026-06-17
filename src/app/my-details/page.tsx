@@ -67,7 +67,7 @@ export default async function MyDetailsPage({ searchParams }: MyDetailsPageProps
                 <VehicleSummaryCard preview={preview} compact />
               </div>
 
-              <div className="order-2 lg:order-1">
+              <div>
                 <div className="flex flex-wrap items-end justify-between gap-4">
                   <div>
                     <p className="text-sm font-bold uppercase tracking-[0.16em] text-black/45">Step 2/2</p>
@@ -242,14 +242,12 @@ export default async function MyDetailsPage({ searchParams }: MyDetailsPageProps
                     you with information on how to proceed with the sale of your vehicle.
                   </p>
                 </form>
-
-                <div className="mt-5 lg:hidden">
-                  <HelpCard />
-                </div>
               </div>
 
-              <aside className="hidden lg:sticky lg:top-24 lg:block lg:self-start">
-                <VehicleSummaryCard preview={preview} />
+              <aside className="grid gap-5 lg:sticky lg:top-24 lg:self-start">
+                <div className="hidden lg:block">
+                  <VehicleSummaryCard preview={preview} />
+                </div>
                 <HelpCard />
               </aside>
             </div>
