@@ -4,8 +4,9 @@ import pages from "@/content/pages.json";
 export const site = {
   name: "Sell My Car Today",
   url: "https://www.sellmycartoday.uk",
-  logo: "https://www.sellmycartoday.uk/smc/wp-content/uploads/2021/04/smctl.png",
+  logo: "/smctl.png",
   localLogo: "/smctl.png",
+  localLightLogo: "/smctl-light.png",
   phone: "03337 729 283",
   phoneHref: "tel:03337729283",
   whatsapp: "https://web.whatsapp.com/send?phone=447424956118",

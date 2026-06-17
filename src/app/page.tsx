@@ -47,7 +47,7 @@ function Hero() {
       </div>
       <div className="relative mx-auto grid min-h-[760px] max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
         <div className="max-w-3xl pt-6">
-          <h1 className="text-balance text-5xl font-black leading-[0.96] tracking-normal text-black sm:text-6xl lg:text-7xl">
+          <h1 className="text-balance text-4xl font-black leading-[0.98] tracking-normal text-black sm:text-5xl lg:text-6xl">
             Sell Your Car The Easy Way
           </h1>
           <p className="mt-6 max-w-2xl text-2xl font-black leading-tight text-neutral-900 sm:text-3xl">

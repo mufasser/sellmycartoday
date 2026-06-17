@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Banknote, CalendarDays, CheckCircle2, Clock3, Phone, ShieldCheck, Star, Truck } from "lucide-react";
@@ -81,17 +82,46 @@ function ArticlePage({ post }: { post: (typeof blogPosts)[number] }) {
       <main>
         <article>
           <section className="page-hero">
-            <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
-              <div className="mb-5 flex items-center gap-2 text-sm font-black uppercase tracking-[0.14em] text-black/64">
-                <CalendarDays size={17} aria-hidden="true" />
-                {new Intl.DateTimeFormat("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                }).format(new Date(post.date))}
+            <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-18">
+              <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.96fr)_minmax(360px,0.88fr)]">
+                <div className="max-w-3xl">
+                  <div className="mb-5 flex items-center gap-2 text-sm font-black uppercase tracking-[0.14em] text-black/64">
+                    <CalendarDays size={17} aria-hidden="true" />
+                    {new Intl.DateTimeFormat("en-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }).format(new Date(post.date))}
+                  </div>
+                  <h1 className="max-w-3xl text-balance text-4xl font-black leading-[1.02] text-black sm:text-5xl lg:text-[3.6rem]">
+                    {post.title}
+                  </h1>
+                  <p className="mt-5 max-w-2xl text-lg leading-8 text-black/68 sm:text-xl">
+                    {post.excerpt}
+                  </p>
+                </div>
+
+                <div className="relative overflow-hidden rounded-lg border border-black/10 bg-[linear-gradient(135deg,#101010_0%,#1f1f1f_54%,#ffd21f_55%,#ffe98d_100%)] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.12)]">
+                  <div className="absolute right-5 top-5 rounded-full border border-white/14 bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-white/78">
+                    Featured guide
+                  </div>
+                  <div className="relative flex min-h-[280px] items-end justify-between gap-5 sm:min-h-[340px]">
+                    <div className="relative z-10 max-w-[14rem] rounded-lg border border-white/12 bg-black/38 p-4 text-white backdrop-blur-sm">
+                      <p className="text-xs font-black uppercase tracking-[0.14em] text-yellow-300">Sell My Car Today</p>
+                      <p className="mt-3 text-sm leading-7 text-white/78">
+                        Practical advice, UK market guidance and straightforward tips to help you sell confidently.
+                      </p>
+                    </div>
+                    <Image
+                      src="/assets/audi-a6.png"
+                      alt={`${post.title} featured image`}
+                      width={660}
+                      height={495}
+                      className="relative z-10 h-auto w-[78%] max-w-[420px] object-contain drop-shadow-[0_28px_34px_rgba(0,0,0,0.3)]"
+                    />
+                  </div>
+                </div>
               </div>
-              <h1>{post.title}</h1>
-              <p>{post.excerpt}</p>
             </div>
           </section>
           <section className="section-space bg-white">
@@ -262,7 +292,7 @@ function SellMyCarPage({ page }: { page: (typeof contentPages)[number] }) {
           <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
             <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:gap-10">
               <div className="max-w-3xl">
-                <h1 className="max-w-3xl text-balance text-4xl font-black leading-[0.98] tracking-normal text-black sm:text-5xl lg:text-6xl">
+                <h1 className="max-w-3xl text-balance text-4xl font-black leading-[1.01] tracking-normal text-black sm:text-[2.8rem] lg:text-[3.35rem]">
                   Sell Your Car Today, Instantly and Effortlessly
                 </h1>
                 <p className="mt-5 max-w-2xl text-lg leading-8 text-black/72 sm:text-xl">
