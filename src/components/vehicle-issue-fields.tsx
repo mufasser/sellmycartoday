@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 const issueOptions = [
@@ -14,7 +15,17 @@ const issueOptions = [
 
 export function VehicleIssueFields() {
   const [hasMajorIssues, setHasMajorIssues] = useState(false);
-  const [issueDetail, setIssueDetail] = useState("");
+  const [issueDetails, setIssueDetails] = useState<string[]>([]);
+  const [showVehicleNotes, setShowVehicleNotes] = useState(false);
+  const [showIssueOptions, setShowIssueOptions] = useState(false);
+
+  function toggleIssue(option: string) {
+    setIssueDetails((current) =>
+      current.includes(option)
+        ? current.filter((item) => item !== option)
+        : [...current, option],
+    );
+  }
 
   return (
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
@@ -36,7 +47,8 @@ export function VehicleIssueFields() {
                   const nextHasIssues = option.value === "yes";
                   setHasMajorIssues(nextHasIssues);
                   if (!nextHasIssues) {
-                    setIssueDetail("");
+                    setIssueDetails([]);
+                    setShowIssueOptions(false);
                   }
                 }}
               />
@@ -48,28 +60,103 @@ export function VehicleIssueFields() {
         </div>
       </div>
 
-      <div>
-        <label htmlFor="issueDetail" className="mb-3 block text-md font-bold text-black">
-          Please describe it below
+      {hasMajorIssues ? (
+        <div>
+          <label className="mb-3 block text-md font-bold text-black">
+            Please describe it below
+          </label>
+          <p className="mb-3 text-sm leading-6 text-black/55">Choose one or more options that match the vehicle.</p>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowIssueOptions((current) => !current)}
+              className="flex min-h-[3.75rem] w-full items-center justify-between gap-4 rounded-lg border border-black/18 bg-white px-4 py-4 text-left text-md font-semibold text-black outline-none transition focus:border-yellow-400"
+            >
+              <span className="flex min-w-0 flex-1 flex-wrap gap-2">
+                {issueDetails.length ? (
+                  issueDetails.map((option) => (
+                    <span
+                      key={option}
+                      className="inline-flex rounded-full bg-yellow-300/30 px-3 py-1 text-sm font-bold text-black"
+                    >
+                      {option}
+                    </span>
+                  ))
+                ) : (
+                  <span>Select the closest options</span>
+                )}
+              </span>
+              <ChevronDown
+                size={18}
+                aria-hidden="true"
+                className={`shrink-0 transition ${showIssueOptions ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {showIssueOptions ? (
+              <div className="absolute z-10 mt-2 w-full rounded-lg border border-black/12 bg-white p-2 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
+                <div className="grid gap-2">
+                  {issueOptions.map((option) => {
+                    const selected = issueDetails.includes(option);
+                    return (
+                      <label
+                        key={option}
+                        className={`flex cursor-pointer items-start gap-3 rounded-md px-3 py-3 text-sm font-semibold transition ${
+                          selected ? "bg-yellow-300/35 text-black" : "bg-[#f7f7f2] text-black/75"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selected}
+                          onChange={() => toggleIssue(option)}
+                          className="mt-0.5 h-4 w-4 rounded border border-black/25 accent-yellow-400"
+                        />
+                        <span>{option}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+
+            {issueDetails.map((option) => (
+              <input key={option} type="hidden" name="issueDetail[]" value={option} />
+            ))}
+            <input
+              type="hidden"
+              name="issueDetailRequired"
+              value={issueDetails.length ? "selected" : ""}
+              required
+            />
+          </div>
+        </div>
+      ) : null}
+
+      <div className="lg:col-span-2">
+        <label className="inline-flex items-center gap-3 text-base font-bold text-black">
+          <input
+            type="checkbox"
+            checked={showVehicleNotes}
+            onChange={(event) => setShowVehicleNotes(event.target.checked)}
+            className="h-5 w-5 rounded border border-black/25 accent-yellow-400"
+          />
+          Add extra notes about the vehicle
         </label>
-        <select
-          id="issueDetail"
-          name="issueDetail"
-          value={issueDetail}
-          disabled={!hasMajorIssues}
-          required={hasMajorIssues}
-          onChange={(event) => setIssueDetail(event.target.value)}
-          className="min-h-[3.75rem] w-full rounded-lg border border-black/18 bg-white px-4 py-4 text-md font-semibold text-black outline-none transition focus:border-yellow-400 disabled:cursor-not-allowed disabled:bg-[#f3f3ef] disabled:text-black/45"
-        >
-          <option value="" disabled>
-            Select the closest option
-          </option>
-          {issueOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+
+        {showVehicleNotes ? (
+          <div className="mt-4">
+            <label htmlFor="vehicleNotes" className="mb-3 block text-base font-bold text-black">
+              Extra notes about the vehicle
+            </label>
+            <textarea
+              id="vehicleNotes"
+              name="vehicleNotes"
+              rows={4}
+              className="w-full rounded-lg border border-black/18 bg-white px-4 py-4 text-base leading-7 text-black outline-none transition focus:border-yellow-400"
+              placeholder="Service history, warning lights, cosmetic marks, finance clearance or anything else helpful."
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

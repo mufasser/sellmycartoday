@@ -63,7 +63,11 @@ export default async function MyDetailsPage({ searchParams }: MyDetailsPageProps
             </Link>
 
             <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_320px] xl:grid-cols-[minmax(0,1.15fr)_360px]">
-              <div>
+              <div className="lg:hidden">
+                <VehicleSummaryCard preview={preview} compact />
+              </div>
+
+              <div className="order-2 lg:order-1">
                 <div className="flex flex-wrap items-end justify-between gap-4">
                   <div>
                     <p className="text-sm font-bold uppercase tracking-[0.16em] text-black/45">Step 2/2</p>
@@ -132,19 +136,6 @@ export default async function MyDetailsPage({ searchParams }: MyDetailsPageProps
                     </div>
 
                     <VehicleIssueFields />
-
-                    <div className="mt-6">
-                      <label htmlFor="vehicleNotes" className="mb-3 block text-base font-bold text-black">
-                        Extra notes about the vehicle
-                      </label>
-                      <textarea
-                        id="vehicleNotes"
-                        name="vehicleNotes"
-                        rows={4}
-                        className="w-full rounded-lg border border-black/18 bg-white px-4 py-4 text-base leading-7 text-black outline-none transition focus:border-yellow-400"
-                        placeholder="Service history, warning lights, cosmetic marks, finance clearance or anything else helpful."
-                      />
-                    </div>
                   </section>
 
                   <section className="mt-10">
@@ -189,6 +180,29 @@ export default async function MyDetailsPage({ searchParams }: MyDetailsPageProps
                         title="Please enter a valid mobile number."
                       />
                     </div>
+
+                    <div className="mt-6">
+                      <p className="mb-3 text-md font-bold text-black">Contact via</p>
+                      <div className="grid gap-3 sm:grid-cols-3">
+                        {[
+                          { label: "Call", name: "contactByCall" },
+                          { label: "WhatsApp", name: "contactByWhatsapp" },
+                          { label: "Email", name: "contactByEmail" },
+                        ].map((option) => (
+                          <label
+                            key={option.name}
+                            className="flex items-center gap-3 rounded-lg border border-black/10 bg-[#f7f7f2] px-4 py-3 text-base font-bold text-black"
+                          >
+                            <input
+                              type="checkbox"
+                              name={option.name}
+                              className="h-5 w-5 rounded border border-black/25 accent-yellow-400"
+                            />
+                            {option.label}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
                   </section>
 
                   <section className="mt-8 grid gap-4">
@@ -228,20 +242,15 @@ export default async function MyDetailsPage({ searchParams }: MyDetailsPageProps
                     you with information on how to proceed with the sale of your vehicle.
                   </p>
                 </form>
+
+                <div className="mt-5 lg:hidden">
+                  <HelpCard />
+                </div>
               </div>
 
-              <aside className="lg:sticky lg:top-24 lg:self-start">
+              <aside className="hidden lg:sticky lg:top-24 lg:block lg:self-start">
                 <VehicleSummaryCard preview={preview} />
-                <div className="mt-5 rounded-lg border border-black/10 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.07)]">
-                  <h2 className="text-xl font-bold text-black">Need help right now?</h2>
-                  <p className="mt-2 text-sm leading-7 text-black/64">
-                    Call our team 24/7 if you would rather confirm the details over the phone.
-                  </p>
-                  <a href={site.phoneHref} className="action-button mt-5 inline-flex w-full">
-                    <Phone size={18} aria-hidden="true" />
-                    {site.phone}
-                  </a>
-                </div>
+                <HelpCard />
               </aside>
             </div>
           </div>
@@ -316,8 +325,10 @@ function CheckboxField({
 
 function VehicleSummaryCard({
   preview,
+  compact = false,
 }: {
   preview: ReturnType<typeof buildValuationPreview>;
+  compact?: boolean;
 }) {
   return (
     <section className="rounded-lg border border-black/10 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.07)]">
@@ -349,24 +360,41 @@ function VehicleSummaryCard({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-3">
-        <Link
-          href="/sell-my-car"
-          className="inline-flex items-center justify-between rounded-lg border border-black/10 bg-[#f7f7f2] px-4 py-3 text-sm font-bold text-black hover:bg-yellow-300"
-        >
-          Edit vehicle details
-          <Pencil size={16} aria-hidden="true" />
-        </Link>
-        <div className="rounded-lg border border-black/10 bg-black p-4 text-white">
-          <p className="text-sm font-bold uppercase tracking-[0.14em] text-yellow-300">What happens next</p>
-          <div className="mt-3 grid gap-3 text-sm leading-7 text-white/78">
-            <p>1. We review your details and confirm the best available offer.</p>
-            <p>2. We arrange collection at a convenient time.</p>
-            <p>3. You receive instant payment before the car leaves.</p>
+      {compact ? null : (
+        <div className="mt-5 grid gap-3">
+          <Link
+            href="/sell-my-car"
+            className="inline-flex items-center justify-between rounded-lg border border-black/10 bg-[#f7f7f2] px-4 py-3 text-sm font-bold text-black hover:bg-yellow-300"
+          >
+            Edit vehicle details
+            <Pencil size={16} aria-hidden="true" />
+          </Link>
+          <div className="rounded-lg border border-black/10 bg-black p-4 text-white">
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-yellow-300">What happens next</p>
+            <div className="mt-3 grid gap-3 text-sm leading-7 text-white/78">
+              <p>1. We review your details and confirm the best available offer.</p>
+              <p>2. We arrange collection at a convenient time.</p>
+              <p>3. You receive instant payment before the car leaves.</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
+  );
+}
+
+function HelpCard() {
+  return (
+    <div className="rounded-lg border border-black/10 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.07)]">
+      <h2 className="text-xl font-bold text-black">Need help right now?</h2>
+      <p className="mt-2 text-sm leading-7 text-black/64">
+        Call our team 24/7 if you would rather confirm the details over the phone.
+      </p>
+      <a href={site.phoneHref} className="action-button mt-5 inline-flex w-full">
+        <Phone size={18} aria-hidden="true" />
+        {site.phone}
+      </a>
+    </div>
   );
 }
 
