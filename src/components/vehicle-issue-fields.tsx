@@ -57,6 +57,7 @@ export function VehicleIssueFields() {
           name="issueDetail"
           value={issueDetail}
           disabled={!hasMajorIssues}
+          required={hasMajorIssues}
           onChange={(event) => setIssueDetail(event.target.value)}
           className="min-h-[3.75rem] w-full rounded-lg border border-black/18 bg-white px-4 py-4 text-md font-semibold text-black outline-none transition focus:border-yellow-400 disabled:cursor-not-allowed disabled:bg-[#f3f3ef] disabled:text-black/45"
         >

@@ -37,6 +37,10 @@ export function ValuationForm({
           aria-label="Vehicle registration"
           defaultValue={defaultReg}
           required
+          minLength={5}
+          maxLength={8}
+          pattern="[A-Za-z0-9 ]{5,8}"
+          title="Please enter a valid registration, for example AB12 CDE."
         />
       </label>
       <label className="field-shell">
@@ -48,6 +52,8 @@ export function ValuationForm({
           aria-label="Vehicle mileage"
           defaultValue={defaultMileage}
           required
+          pattern="[0-9, ]+"
+          title="Please enter mileage using numbers only."
         />
       </label>
       <button className={`action-button ${variant === "sidebar" ? "min-h-[3.75rem] w-full" : "min-h-16"}`} type="submit">

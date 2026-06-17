@@ -1,3 +1,12 @@
+const vehicleCatalog = [
+  { make: "Audi", model: "A6 Saloon", imageSrc: "/assets/audi-a6.png" },
+  { make: "BMW", model: "3 Series", imageSrc: "/assets/audi-a6.png" },
+  { make: "Volkswagen", model: "Golf GTI Auto", imageSrc: "/assets/audi-a6.png" },
+  { make: "Ford", model: "Focus ST-Line", imageSrc: "/assets/audi-a6.png" },
+  { make: "Mercedes-Benz", model: "C-Class", imageSrc: "/assets/audi-a6.png" },
+  { make: "Toyota", model: "Corolla Hybrid", imageSrc: "/assets/audi-a6.png" },
+];
+
 export function normaliseRegistration(value: string) {
   const cleaned = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
 
@@ -34,8 +43,14 @@ export function buildValuationPreview(registration: string, mileage: number) {
   const regAdjustment = (regSignal % 1600) - 800;
   const midpoint = clampToNearest50(base - mileageAdjustment + regAdjustment, 1450, 28450);
   const spread = Math.max(500, Math.round(midpoint * 0.08 / 50) * 50);
+  const vehicleMatched = /^[A-Z0-9 ]{5,8}$/.test(reg);
+  const vehicle = vehicleMatched ? vehicleCatalog[regSignal % vehicleCatalog.length] : null;
 
   return {
+    found: !!vehicle,
+    imageSrc: vehicle?.imageSrc ?? null,
+    make: vehicle?.make ?? null,
+    model: vehicle?.model ?? null,
     reg,
     mileage: safeMileage,
     low: midpoint - spread,

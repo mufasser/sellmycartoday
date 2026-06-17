@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowLeft,
   Banknote,
+  CarFront,
   CheckCircle2,
   ClipboardCheck,
   Pencil,
@@ -17,7 +19,6 @@ import { VehicleIssueFields } from "@/components/vehicle-issue-fields";
 import { site } from "@/lib/site";
 import {
   buildValuationPreview,
-  formatCurrency,
   formatMileage,
   normaliseRegistration,
   parseMileage,
@@ -66,7 +67,7 @@ export default async function MyDetailsPage({ searchParams }: MyDetailsPageProps
                 <div className="flex flex-wrap items-end justify-between gap-4">
                   <div>
                     <p className="text-sm font-bold uppercase tracking-[0.16em] text-black/45">Step 2/2</p>
-                    <h1 className="mt-3 text-balance text-4xl font-bold leading-[0.98] text-black sm:text-5xl">
+                    <h1 className="mt-3 text-balance text-4xl font-bold leading-[0.98] text-black sm:text-3xl">
                       Your details
                     </h1>
                     {/* <p className="mt-4 max-w-3xl text-md leading-8 text-black/68">
@@ -160,10 +161,33 @@ export default async function MyDetailsPage({ searchParams }: MyDetailsPageProps
                     </div>
 
                     <div className="mt-6 grid gap-5 md:grid-cols-2">
-                      <Field label="Full name" name="fullName" placeholder="Full name" required />
+                      <Field
+                        label="Full name"
+                        name="fullName"
+                        placeholder="Full name"
+                        required
+                        minLength={2}
+                        pattern="[A-Za-z ,.'-]{2,}"
+                        title="Please enter your full name."
+                      />
                       <Field label="Email address" name="email" placeholder="name@example.com" type="email" required />
-                      <Field label="Postcode" name="postcode" placeholder="HP53JE" required />
-                      <Field label="Mobile number" name="mobile" placeholder="07864 423675" type="tel" required />
+                      <Field
+                        label="Postcode"
+                        name="postcode"
+                        placeholder="HP53JE"
+                        required
+                        pattern="[A-Za-z0-9 ]{5,8}"
+                        title="Please enter a valid postcode."
+                      />
+                      <Field
+                        label="Mobile number"
+                        name="mobile"
+                        placeholder="07864 423675"
+                        type="tel"
+                        required
+                        pattern="[0-9+ ]{10,15}"
+                        title="Please enter a valid mobile number."
+                      />
                     </div>
                   </section>
 
@@ -234,12 +258,18 @@ function Field({
   placeholder,
   required = false,
   type = "text",
+  pattern,
+  title,
+  minLength,
 }: {
   label: string;
   name: string;
   placeholder: string;
   required?: boolean;
   type?: string;
+  pattern?: string;
+  title?: string;
+  minLength?: number;
 }) {
   return (
     <label className="grid gap-3">
@@ -251,6 +281,9 @@ function Field({
         type={type}
         placeholder={placeholder}
         required={required}
+        pattern={pattern}
+        title={title}
+        minLength={minLength}
         className="min-h-[3.75rem] rounded-lg border border-black/18 bg-white px-4 py-4 text-md font-semibold text-black outline-none transition focus:border-yellow-400"
       />
     </label>
@@ -290,20 +323,29 @@ function VehicleSummaryCard({
     <section className="rounded-lg border border-black/10 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.07)]">
       <p className="text-sm font-bold uppercase tracking-[0.16em] text-black/45">The vehicle you&apos;re selling</p>
       <div className="mt-5 rounded-lg bg-[linear-gradient(135deg,#fffdf6_0%,#fff6cf_100%)] p-5">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-2xl font-bold text-black">Vehicle preview</h2>
-            <p className="mt-1 text-sm leading-6 text-black/58">Indicative details based on your valuation request.</p>
+        <div className="overflow-hidden rounded-lg border border-black/10 bg-white">
+          <div className="flex min-h-[210px] items-center justify-center bg-[linear-gradient(135deg,#fffdf7_0%,#fff7d1_100%)] p-6">
+            {preview.found && preview.imageSrc ? (
+              <Image
+                src={preview.imageSrc}
+                alt={`${preview.make} ${preview.model} car preview`}
+                width={660}
+                height={495}
+                className="h-auto w-full max-w-[280px] object-contain"
+              />
+            ) : (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-black/28">
+                <CarFront size={110} strokeWidth={1.2} aria-hidden="true" />
+                <span className="text-sm font-bold uppercase tracking-[0.16em]">Vehicle not found</span>
+              </div>
+            )}
           </div>
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-black text-yellow-300 text-2xl font-bold">
-            {preview.reg.charAt(0)}
+          <div className="grid gap-3 p-4">
+            <PreviewRow label="Registration" value={preview.reg} />
+            <PreviewRow label="Mileage" value={`${formatMileage(preview.mileage)} miles`} />
+            {preview.found && preview.make ? <PreviewRow label="Make" value={preview.make} /> : null}
+            {preview.found && preview.model ? <PreviewRow label="Model" value={preview.model} /> : null}
           </div>
-        </div>
-
-        <div className="mt-5 grid gap-3">
-          <PreviewRow label="Registration" value={preview.reg} />
-          <PreviewRow label="Mileage" value={`${formatMileage(preview.mileage)} miles`} />
-          <PreviewRow label="Estimated midpoint" value={formatCurrency(preview.midpoint)} />
         </div>
       </div>
 

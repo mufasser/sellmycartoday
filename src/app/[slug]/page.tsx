@@ -210,9 +210,9 @@ function ContentPage({
 function SellMyCarPage({ page }: { page: (typeof contentPages)[number] }) {
   const heroPoints = [
     { label: "30-second valuation", icon: Clock3 },
-    { label: "Free UK collection", icon: Truck },
+    { label: "Free collection", icon: Truck },
     { label: "No admin fees", icon: ShieldCheck },
-    { label: "Instant bank transfer", icon: Banknote },
+    { label: "Instant payment", icon: Banknote },
   ];
 
   const featureCards = [
@@ -631,9 +631,50 @@ function ContactPage({ page }: { page: (typeof contentPages)[number] }) {
                 <Phone size={18} aria-hidden="true" />
                 {site.phone}
               </a>
+              <form action="/thanks-for-asking" method="get" className="mt-6 grid gap-4">
+                <input type="hidden" name="source" value="contact-form" />
+                <ContactField
+                  label="Full name"
+                  name="fullName"
+                  placeholder="Full name"
+                  required
+                  minLength={2}
+                  pattern="[A-Za-z ,.'-]{2,}"
+                  title="Please enter your full name."
+                />
+                <ContactField
+                  label="Email address"
+                  name="email"
+                  placeholder="name@example.com"
+                  type="email"
+                  required
+                />
+                <ContactField
+                  label="Mobile number"
+                  name="mobile"
+                  placeholder="07864 423675"
+                  type="tel"
+                  required
+                  pattern="[0-9+ ]{10,15}"
+                  title="Please enter a valid mobile number."
+                />
+                <label className="grid gap-3">
+                  <span className="text-md font-bold text-black">How can we help?</span>
+                  <textarea
+                    name="message"
+                    rows={4}
+                    required
+                    className="rounded-lg border border-black/18 bg-white px-4 py-4 text-md font-semibold text-black outline-none transition focus:border-yellow-400"
+                    placeholder="Tell us about your car, collection needs or any question you have."
+                  />
+                </label>
+                <button className="action-button mt-2 inline-flex w-full justify-center" type="submit">
+                  Send enquiry
+                </button>
+              </form>
             </div>
             <div className="article-aside">
-              <h2>Value My Car</h2>
+              <h2 className="mb-4">Value My Car</h2>
               <ValuationForm variant="sidebar" source="contact-page" />
             </div>
           </div>
@@ -644,6 +685,44 @@ function ContactPage({ page }: { page: (typeof contentPages)[number] }) {
   );
 }
 
+function ContactField({
+  label,
+  name,
+  placeholder,
+  required = false,
+  type = "text",
+  pattern,
+  title,
+  minLength,
+}: {
+  label: string;
+  name: string;
+  placeholder: string;
+  required?: boolean;
+  type?: string;
+  pattern?: string;
+  title?: string;
+  minLength?: number;
+}) {
+  return (
+    <label className="grid gap-3">
+      <span className="text-md font-bold text-black">
+        {label} {required ? <span className="text-red-500">*</span> : null}
+      </span>
+      <input
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        required={required}
+        pattern={pattern}
+        title={title}
+        minLength={minLength}
+        className="min-h-[3.75rem] rounded-lg border border-black/18 bg-white px-4 py-4 text-md font-semibold text-black outline-none transition focus:border-yellow-400"
+      />
+    </label>
+  );
+}
+
 function heroCopy(slug: string) {
   const copy: Record<string, string> = {
     "sell-my-car":
@@ -651,11 +730,11 @@ function heroCopy(slug: string) {
     "why-choose-us":
       "Choose Sell My Car Today for no admin fees, free collection, guaranteed sale, instant payment and a simple process.",
     "about-us":
-      "Sell My Car Today helps UK drivers sell their cars quickly, safely and confidently with a real-time valuation process.",
-    "terms-and-conditions": "Read the Sell My Car Today terms and conditions for using our valuation and car buying service.",
-    "privacy-policy": "Read how Sell My Car Today handles personal data, privacy and website information.",
-    "cookie-policy-uk": "Read the Sell My Car Today Cookie Policy for visitors in the United Kingdom.",
-    "thanks-for-asking": "Thanks for asking Sellmycartoday.uk to value your car.",
+      "Sell My Car Today London helps UK drivers sell their cars quickly, safely and confidently with a real-time valuation process.",
+    "terms-and-conditions": "Read the Sell My Car Today London terms and conditions for using our valuation and car buying service.",
+    "privacy-policy": "Read how Sell My Car Today London handles personal data, privacy and website information.",
+    "cookie-policy-uk": "Read the Sell My Car Today London Cookie Policy for visitors in the United Kingdom.",
+    "thanks-for-asking": "Thanks for asking SellMyCarToday.uk to value your car.",
   };
 
   return copy[slug] || site.description;

@@ -11,7 +11,8 @@ export const site = {
   phoneHref: "tel:03337729283",
   whatsapp: "https://web.whatsapp.com/send?phone=447424956118",
   email: "info@sellmycartoday.uk",
-  address: "London, United Kingdom",
+  address: "Church Rd, London E10 7JQ, United Kingdom",
+  addressLink: "https://maps.app.goo.gl/N9twFQvQLi5Prznf6",
   title: "Sell My Car Today | Instant Car Valuation & Free Collection UK",
   description:
     "Sell your car quickly with Sell My Car Today. Get an instant car valuation in 30 seconds, free collection and secure same-day bank transfer anywhere in the UK.",

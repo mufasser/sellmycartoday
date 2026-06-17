@@ -11,14 +11,14 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.3fr_1fr_1fr_1fr] lg:px-8">
         <div>
           <Image
-            src={site.localLogo}
+            src={site.localLightLogo}
             alt="Sell My Car Today"
             width={176}
             height={58}
             className="mb-6 h-14 w-auto brightness-110"
           />
           <p className="max-w-sm text-sm leading-7 text-white/72">
-            Sell your car quickly with Sell My Car Today. Get an instant car valuation in 30
+            Sell your car quickly with Sell My Car Today London. Get an instant car valuation in 30
             seconds, free collection and secure same-day bank transfer anywhere in the UK.
           </p>
           <div className="mt-6 grid gap-3 text-sm text-white/80">
@@ -30,10 +30,10 @@ export function SiteFooter() {
               <Mail size={17} aria-hidden="true" />
               {site.email}
             </a>
-            <span className="inline-flex items-center gap-3">
+            <a href={site.addressLink} className="inline-flex items-center gap-3 hover:text-yellow-300" target="_blank" rel="noopener noreferrer">
               <MapPin size={17} aria-hidden="true" />
               {site.address}
-            </span>
+            </a>
           </div>
         </div>
 
@@ -58,8 +58,13 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 px-4 py-5 text-center text-xs text-white/55">
-        © 2026 - all rights reserved by sellmycartoday.uk
+      <div className="border-t border-white/10  px-4 py-5 text-center text-xs text-white/55 mx-auto flex max-w-7xl items-center justify-between gap-5 px-4 py-3 sm:px-6 lg:px-8">
+        <div>© 2026 - all rights reserved by sellmycartoday.uk</div>
+        <div>Developed by{" "}
+        <a href="https://www.webmobi.dev" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-300">
+          WebMobi.dev
+        </a>
+        </div>
       </div>
     </footer>
   );

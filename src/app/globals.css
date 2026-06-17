@@ -192,6 +192,7 @@ button {
   padding: 1rem 1.25rem;
   font-weight: 900;
   color: #ffffff;
+  cursor: pointer;
   transition:
     transform 180ms ease,
     background 180ms ease,
